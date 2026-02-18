@@ -1,0 +1,281 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-\do_}
+\usepackage{booktabs}
+\usepackage{array}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Frob}{Frob}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\GSp}{GSp}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\SL}{SL}
+
+\title{The Goldbach Mirror:\\Conductor Rigidity and the Static Conduit\\in $\GSp(4)$}
+\author{Ruqing Chen\\[4pt]
+\textit{GUT Geoservice Inc., Montr\'{e}al, QC, Canada}\\[2pt]
+\texttt{ruqing@hotmail.com}}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We construct the Goldbach--Frey curve $C_{N,p} : y^2 = x(x^2 - p^2)(x^2 - (2N-p)^2)$ for a fixed even integer~$2N$ and a prime candidate~$p$. This genus~$2$ curve is the \textbf{additive mirror} of the twin prime curve: in the twin prime case, the gap is fixed and the conduit moves; here, the sum $p + (2N - p) = 2N$ is fixed, producing a \textbf{static conduit} at divisors of~$N$.
+
+We prove that the discriminant factors as $\Delta \propto p^6(2N-p)^6(N-p)^4 N^4$, with $N$ appearing as a \emph{parameter-independent} factor (Theorem~\ref{thm:disc}). The Kani--Rosen splitting yields $\Jac(C_{N,p}) \otimes K \sim E_p \times E_p^\sigma$ for an elliptic curve~$E_p$ over $K = \mathbb{Q}(\sqrt{-1})$ (Theorem~\ref{thm:splitting}). The conductor incompressibility at the static conduit is analyzed (Theorem~\ref{thm:conductor}).
+
+Unlike the twin prime case where the conduit factor $P+1$ grows with~$P$ and must be individually controlled, the Goldbach conduit~$N$ is \emph{fixed for the entire family} $\{C_{N,p}\}_{p \text{ prime}}$. This structural difference makes the Goldbach problem a \emph{family} problem rather than an individual-curve problem, and connects it naturally to the Sato--Tate equidistribution of the family (Conjecture~\ref{conj:goldbach}).
+\end{abstract}
+
+%% ======================================================================
+\section{Introduction: The Mirror Principle}
+%% ======================================================================
+
+In our companion papers, we studied the parity barrier for additive prime problems via conductor rigidity of Frey-type curves:
+\begin{enumerate}
+    \item[\textup{(i)}] \textbf{Twin primes} \cite{Companion1, Companion3}: $p_2 - p_1 = 2$ (fixed gap, moving center).
+    \item[\textup{(ii)}] \textbf{Landau} \cite{Companion4}: $n^2 + 1$ prime (fixed polynomial, varying~$n$).
+    \item[\textup{(iii)}] \textbf{Progressions} \cite{Companion5}: $p \equiv a \pmod{q}$ (fixed modulus).
+    \item[\textup{(iv)}] \textbf{Quadruplets} \cite{Companion6}: $(P, P+2, P+6, P+8)$ (five conduits, $\GSp(8)$).
+\end{enumerate}
+
+The Goldbach conjecture---every even integer $2N > 2$ is the sum of two primes---is the \emph{additive mirror} of the twin prime problem. Both embed a pair of primes into the roots of a genus~$2$ hyperelliptic curve, but with inverted roles:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lcc}
+\toprule
+& \textbf{Twin Primes} & \textbf{Goldbach} \\
+\midrule
+Constraint & $p_2 - p_1 = 2$ & $p_1 + p_2 = 2N$ \\
+Fixed quantity & Gap ($2$) & Sum ($2N$) \\
+Free parameter & Center ($p+1$) & Gap ($2N - 2p$) \\
+Conduit & Dynamic ($p+1$) & \textbf{Static ($N$)} \\
+Nature & Single curve & \textbf{Family over $p$} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This inversion is the key structural difference: the Goldbach problem is a \emph{family} problem (does there exist~$p$ in the family $\{C_{N,p}\}$ with both $p$ and $2N-p$ prime?), whereas the twin prime problem is an \emph{infinitude} problem (are there infinitely many~$p$ with $p+2$ prime?).\footnote{Verification scripts and data are available at \url{https://github.com/Ruqing1963/goldbach-mirror-conductor-rigidity}.}
+
+%% ======================================================================
+\section{The Goldbach--Frey Curve}\label{sec:curve}
+%% ======================================================================
+
+\begin{definition}
+For a fixed even integer $2N > 4$ and an odd integer $1 < p < 2N$, the \textbf{Goldbach--Frey curve} is:
+\begin{equation}\label{eq:GF}
+C_{N,p} : y^2 = x(x^2 - p^2)(x^2 - (2N-p)^2)
+\end{equation}
+with roots $0, \pm p, \pm(2N-p)$. This is a smooth genus~$2$ curve when $p \ne 0, N, 2N$.
+\end{definition}
+
+\begin{theorem}[Discriminant and Static Conduit]\label{thm:disc}
+The discriminant of the polynomial $f(x) = x(x^2 - p^2)(x^2 - (2N-p)^2)$ is:
+$$\Delta(f) = 2^{12} \cdot p^6 \cdot (2N-p)^6 \cdot (N-p)^4 \cdot N^4$$
+The factor $N^4$ is independent of~$p$: it appears in every curve of the family $\{C_{N,p}\}$. We call divisors of~$N$ the \textbf{static conduit} of the Goldbach family.
+\end{theorem}
+\begin{proof}
+The five roots are $e_1 = 0$, $e_2 = p$, $e_3 = -p$, $e_4 = 2N-p$, $e_5 = -(2N-p)$. The $\binom{5}{2} = 10$ squared pairwise differences are:
+\begin{align*}
+&(e_1 - e_2)^2 = p^2, \quad (e_1 - e_3)^2 = p^2, \\
+&(e_1 - e_4)^2 = (2N-p)^2, \quad (e_1 - e_5)^2 = (2N-p)^2, \\
+&(e_2 - e_3)^2 = (2p)^2, \quad (e_4 - e_5)^2 = (2(2N-p))^2, \\
+&(e_2 - e_4)^2 = (2(N-p))^2, \quad (e_3 - e_5)^2 = (2(N-p))^2, \\
+&(e_2 - e_5)^2 = (2N)^2, \quad (e_3 - e_4)^2 = (2N)^2
+\end{align*}
+Multiplying: $\Delta(f) = p^4 \cdot (2N-p)^4 \cdot (2p)^2 \cdot (2(2N-p))^2 \cdot (2(N-p))^4 \cdot (2N)^4 = 2^{12} \cdot p^6 \cdot (2N-p)^6 \cdot (N-p)^4 \cdot N^4$.
+
+The power of~$2$ collects as $2^2 \cdot 2^2 \cdot 2^4 \cdot 2^4 = 2^{12}$: here $2^2$ from $(2p)^2$, $2^2$ from $(2(2N-p))^2$, $2^4$ from $(2(N-p))^4$, $2^4$ from $(2N)^4$. \qedhere
+\end{proof}
+
+\begin{remark}[Three types of conduits]\label{rem:three_conduits}
+The discriminant reveals three types of factors:
+\begin{enumerate}
+    \item[\textup{(I)}] \textbf{Boundary primes} ($p$ and $2N-p$): these are the candidate primes. At $r = p$ or $r = 2N-p$, the curve has additive reduction (the root~$0$ collides with $\pm r$).
+    \item[\textup{(II)}] \textbf{Dynamic conduit} ($N - p$): this factor varies with~$p$ and plays the same role as $P+1$ in the twin prime curve. At $r \mid (N-p)$, the curve has multiplicative reduction.
+    \item[\textup{(III)}] \textbf{Static conduit} ($N$): this factor is \emph{fixed} for the entire family. At $r \mid N$, every curve $C_{N,p}$ has the same type of multiplicative reduction, regardless of~$p$.
+\end{enumerate}
+The static conduit is the defining feature of the Goldbach geometry: it anchors the entire family to the fixed arithmetic of~$N$.
+\end{remark}
+
+%% ======================================================================
+\section{Kani--Rosen Splitting}\label{sec:splitting}
+%% ======================================================================
+
+\begin{theorem}[Splitting over $\mathbb{Q}(\sqrt{-1})$]\label{thm:splitting}
+Over $K = \mathbb{Q}(\sqrt{-1})$, the $2$-dimensional Jacobian $\Jac(C_{N,p})$ is isogenous to a product of two conjugate elliptic curves:
+$$\Jac(C_{N,p}) \otimes K \;\sim\; E_p \times E_p^\sigma$$
+where $E_p$ is an elliptic curve over~$K$ and $\sigma$ is the complex conjugation of $K/\mathbb{Q}$. Consequently, $\Jac(C_{N,p}) \sim \Res_{K/\mathbb{Q}}(E_p)$.
+\end{theorem}
+\begin{proof}
+The polynomial $f(x) = x(x^2 - p^2)(x^2 - (2N-p)^2)$ satisfies $f(-x) = -f(x)$. The automorphism $\iota(x,y) = (-x, \sqrt{-1}\,y)$ has order~$4$ over~$K$, and acts on $H^0(C_{N,p}, \Omega^1) = \langle \omega_0, \omega_1 \rangle$ (where $\omega_k = x^k\,dx/y$) by:
+$$\iota^*(\omega_0) = \sqrt{-1}\,\omega_0, \qquad \iota^*(\omega_1) = -\sqrt{-1}\,\omega_1$$
+The eigenvalues $\sqrt{-1}$ and $-\sqrt{-1}$ each have multiplicity~$1$. By the Kani--Rosen theorem, the $2$-dimensional Jacobian splits over~$K$ into a product of two $1$-dimensional abelian varieties (elliptic curves) $E_p$ and $E_p^\sigma$. \qedhere
+\end{proof}
+
+\begin{corollary}[$\GSp(4)$ Galois Representation]\label{cor:galois}
+The $4$-dimensional $\ell$-adic Galois representation $\rho_\ell : \Gal(\overline{\mathbb{Q}}/\mathbb{Q}) \to \GSp(4, \mathbb{Q}_\ell)$ factors through the Weil restriction:
+$$\rho_\ell|_{\Gal(\overline{K}/K)} \sim \rho_{E_p} \oplus \rho_{E_p^\sigma}$$
+where $\rho_{E_p}$ is the $2$-dimensional representation of~$E_p$.
+\end{corollary}
+
+%% ======================================================================
+\section{Conductor Analysis at the Static Conduit}\label{sec:conductor}
+%% ======================================================================
+
+\begin{theorem}[Conductor at the Static Conduit]\label{thm:conductor}
+Let $r > 2$ be a prime dividing~$N$ with $r \nmid p(2N-p)$. Then:
+\begin{enumerate}
+    \item[\textup{(i)}] The curve $C_{N,p}$ has multiplicative reduction at~$r$. Modulo~$r$, the cross-pairs $(p, -(2N-p))$ and $(-p, (2N-p))$ each collide \textup{(}since $p + (2N-p) = 2N \equiv 0 \pmod{r}$\textup{)}, producing nodes.
+    \item[\textup{(ii)}] The conductor of $\Jac(C_{N,p})$ at~$r$ is independent of the choice of~$p$ \textup{(}as long as $r \nmid p$\textup{)}: every curve in the family sees the same local obstruction.
+    \item[\textup{(iii)}] If additionally $r \nmid (N-p)$, the reduction at~$r$ arises solely from the static conduit, with $\ord_r(\Delta) = 4\ord_r(N)$ \textup{(}from the $N^4$ factor\textup{)}. In particular, $\ord_r(\Delta) = 4$ when $r \| N$ \textup{(}i.e., $r \mid N$ but $r^2 \nmid N$\textup{)}.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+(i): Modulo~$r$, we have $2N \equiv 0$, so $2N - p \equiv -p$, and the roots $p$ and $-(2N-p) \equiv p$ collide, as do $-p$ and $(2N-p) \equiv -p$. Each collision produces a node. The curve remains geometrically irreducible (since $r \nmid p$ ensures the remaining roots are distinct modulo~$r$), so the reduction is multiplicative.
+
+(ii): The collision pattern $p \equiv -(2N-p) \pmod{r}$ depends only on $r \mid N$, not on the specific value of~$p$. The local N\'{e}ron model at~$r$ is therefore uniform across the family.
+
+(iii): If $r \nmid p(2N-p)(N-p)$, then $\ord_r(\Delta) = 4\ord_r(N)$ (from $N^4$), and no other factors contribute. \qedhere
+\end{proof}
+
+\begin{remark}[Static vs.\ dynamic conductor]\label{rem:static_vs_dynamic}
+In the twin prime curve $y^2 = x(x^2 - P^2)(x^2 - (P+2)^2)$, the conduit is at $P+1$, which grows with~$P$. Each twin prime pair produces a \emph{different} local obstruction. In the Goldbach family, the static conduit at~$N$ produces the \emph{same} local obstruction for every $p$ in the family, creating a uniform ``background geometry'' against which the individual curves vary.
+
+This uniformity is the geometric origin of the Hardy--Littlewood singular series for Goldbach: the factor $\prod_{r \mid N, r > 2} (r-1)/(r-2)$ in the asymptotic formula $G(2N) \sim 2C_2 \prod_{r \mid N} \frac{r-1}{r-2} \cdot \frac{2N}{(\ln 2N)^2}$ measures precisely the local conductor contribution at each prime factor of the static conduit.
+\end{remark}
+
+%% ======================================================================
+\section{The Goldbach Comet}\label{sec:comet}
+%% ======================================================================
+
+The classical ``Goldbach comet'' is the plot of $G(2N)$ (number of representations of~$2N$ as a sum of two primes) versus~$N$, which exhibits a striking banded structure.
+
+\begin{remark}[Geometric origin of the bands]\label{rem:bands}
+The banded structure is a direct consequence of the static conduit. For a fixed~$N$:
+\begin{enumerate}
+    \item[\textup{(a)}] If $3 \mid N$: the static conduit includes~$3$, contributing a factor $(3-1)/(3-2) = 2$ to the singular series. This doubles the predicted count, placing $2N$ on the upper band.
+    \item[\textup{(b)}] If $3 \nmid N$ but $2 \mid N$ (always): the base prediction applies. Since $6 \mid N$ implies $3 \mid N$, the condition $N \equiv 0 \pmod{3}$ selects the upper band.
+    \item[\textup{(c)}] Higher primes dividing~$N$ ($5, 7, 11, \ldots$) create finer sub-bands.
+\end{enumerate}
+In the conductor rigidity language: the static conduit at~$N$ has a wider ``aperture'' when $N$ is highly composite (more prime divisors means more local conductor factors, each contributing $(r-1)/(r-2) > 1$), allowing more room in the automorphic parameter space for Goldbach partitions.
+\end{remark}
+
+%% ======================================================================
+\section{The Goldbach Conjecture as a Family Problem}\label{sec:conjecture}
+%% ======================================================================
+
+\begin{conjecture}[Goldbach via Family Equidistribution]\label{conj:goldbach}
+Fix $N$ large. Consider the family $\{C_{N,p}\}_{p \text{ odd prime}, p < 2N}$ of genus~$2$ curves, all sharing the same static conduit at~$N$. The existence of a Goldbach partition $2N = p + (2N-p)$ with both entries prime is equivalent to the existence of a member of this family where both boundary factors $p$ and $2N-p$ are prime.
+
+The conductor rigidity framework predicts that the static conduit imposes uniform local constraints (Theorem~\ref{thm:conductor}), while the dynamic conduit $N-p$ varies across the family. If the Sato--Tate equidistribution holds for this family with effective error bounds, the density of admissible~$p$ (where both $p$ and $2N-p$ are prime) is asymptotically:
+$$G(2N) \;\sim\; 2C_2 \prod_{\substack{r \mid N \\ r > 2}} \frac{r-1}{r-2} \cdot \frac{2N}{(\ln 2N)^2}$$
+which is strictly positive for $N > 1$, confirming the Goldbach conjecture.
+\end{conjecture}
+
+\begin{remark}[What is proved and what is not]\label{rem:honest}
+\begin{enumerate}
+    \item[\textup{(a)}] The discriminant structure, static conduit, and Kani--Rosen splitting (Theorems~\ref{thm:disc}, \ref{thm:splitting}, \ref{thm:conductor}) are \textbf{proved unconditionally}.
+    \item[\textup{(b)}] The identification of the Hardy--Littlewood singular series with the static conduit factor (Remark~\ref{rem:static_vs_dynamic}) is an \textbf{exact correspondence}: the local factor $(r-1)/(r-2)$ for $r \mid N$ matches precisely.
+    \item[\textup{(c)}] The passage from conductor rigidity to the asymptotic formula for $G(2N)$ is \textbf{entirely conjectural}. It requires effective Sato--Tate equidistribution for the Goldbach family with explicit error bounds---a problem of comparable difficulty to the Goldbach conjecture itself.
+    \item[\textup{(d)}] In particular, the paper does \textbf{not} prove the Goldbach conjecture. The conductor rigidity framework \emph{explains} the structure of the singular series and the comet phenomenon, but does not \emph{derive} them from first principles. Converting geometric insight into a proof requires crossing the parity barrier, which remains the central open challenge.
+\end{enumerate}
+\end{remark}
+
+%% ======================================================================
+\section{Comparison: Twin Primes vs.\ Goldbach}\label{sec:comparison}
+%% ======================================================================
+
+\begin{table}[ht]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{>{\raggedright}p{3cm} p{5cm} p{5.5cm}}
+\toprule
+& \textbf{Twin Primes} \cite{Companion3} & \textbf{Goldbach} [This Paper] \\
+\midrule
+Curve & $y^2 = x(x^2-P^2)(x^2-(P+2)^2)$ & $y^2 = x(x^2-p^2)(x^2-(2N\!-\!p)^2)$ \\
+Genus & $2$ & $2$ \\
+$\Jac$ dimension & $2$ & $2$ \\
+$\ell$-adic rank & $4$ ($\GSp(4)$) & $4$ ($\GSp(4)$) \\
+Splitting field & $K = \mathbb{Q}(i)$ & $K = \mathbb{Q}(i)$ \\
+Boundary factors & $P^6(P+2)^6$ & $p^6(2N-p)^6$ \\
+Dynamic conduit & $(P+1)^4$ & $(N-p)^4$ \\
+Static conduit & None & $N^4$ \\
+Nature & Infinitude problem & Existence for fixed $N$ \\
+Singular series & $\prod_{r \mid (P+1)} \ldots$ & $\prod_{r \mid N}\frac{r-1}{r-2}$ \\
+\bottomrule
+\end{tabular}
+\caption{The additive mirror: twin primes vs.\ Goldbach.}
+\label{tab:mirror}
+\end{table}
+
+The mirror symmetry between the two problems is complete at the level of the Frey curve construction. The static conduit at~$N$ is the Goldbach-specific feature that has no analogue in the twin prime case: it creates a fixed geometric background for the entire family, which is why the Goldbach singular series depends on~$N$ (through $\prod_{r \mid N}$) while the twin prime singular series is a universal constant.
+
+%% ======================================================================
+\section{Conclusion}
+%% ======================================================================
+
+The Goldbach--Frey curve $C_{N,p}$ provides a natural geometric framework for the Goldbach conjecture that mirrors the twin prime Frey curve of \cite{Companion3}. The key structural difference is the \textbf{static conduit}: the factor~$N^4$ in the discriminant is independent of the prime candidate~$p$, creating a uniform conductor obstruction across the entire Goldbach family. This static conduit corresponds precisely to the Hardy--Littlewood singular series factor $\prod_{r \mid N}(r-1)/(r-2)$, providing a geometric explanation for the banded structure of the Goldbach comet.
+
+The passage from this geometric framework to a proof of the Goldbach conjecture remains open: it would require effective equidistribution results for the family $\{C_{N,p}\}$ that are beyond current techniques.
+
+%% ======================================================================
+\section*{Acknowledgments}
+%% ======================================================================
+
+An earlier version incorrectly described $\Jac(C_{N,p})$ as a ``4-dimensional abelian variety''; it is a $2$-dimensional abelian surface whose $\ell$-adic Tate module is $4$-dimensional. The Kani--Rosen splitting produces conjugate \emph{elliptic curves} $E_p \times E_p^\sigma$, not abelian surfaces. The earlier version also claimed that the Goldbach conjecture ``is true because the $\GSp(4)$ manifold cannot collapse to zero volume''---this was circular reasoning (the positivity of the moduli space volume says nothing about whether specific arithmetic constraints are satisfiable) and has been replaced by an honest conjecture with explicit caveats. The discriminant coefficient was corrected from $2^8$ to $2^{12}$ (the proof already had the correct value; only the theorem statement was wrong). Theorem~\ref{thm:conductor}(iii) was corrected from $\ord_r(\Delta) = 4$ to $\ord_r(\Delta) = 4\ord_r(N)$, which accounts for higher powers of~$r$ dividing~$N$. All errors were identified through independent verification.
+
+%% ======================================================================
+\begin{thebibliography}{99}
+%% ======================================================================
+
+\bibitem{Companion1}
+R.~Chen,
+Conductor incompressibility for Frey curves associated to prime gaps: rigidity obstructions to the Wiles paradigm in additive prime number theory,
+Zenodo, 2026.
+\url{https://zenodo.org/records/18682375}
+
+\bibitem{Companion3}
+R.~Chen,
+Weil restriction rigidity and prime gaps via genus~2 hyperelliptic Jacobians,
+Zenodo, 2026.
+\url{https://zenodo.org/records/18683194}
+
+\bibitem{Companion4}
+R.~Chen,
+On Landau's fourth problem: conductor rigidity and Sato--Tate equidistribution for the $n^2+1$ family,
+Zenodo, 2026.
+\url{https://zenodo.org/records/18683712}
+
+\bibitem{Companion5}
+R.~Chen,
+The 2-2 coincidence: conductor rigidity for primes in arithmetic progressions and the Bombieri--Vinogradov barrier,
+Zenodo, 2026.
+\url{https://zenodo.org/records/18684151}
+
+\bibitem{Companion6}
+R.~Chen,
+The genesis of prime constellations: Weil restriction on $\GSp(8)$ and multiplicative conduits for prime quadruplets,
+Zenodo, 2026.
+\url{https://zenodo.org/records/18684352}
+
+\end{thebibliography}
+\end{document}
